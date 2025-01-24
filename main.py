@@ -1,5 +1,5 @@
 #hack to avoid ALSA issue on WSL
-import os 
+import os
 os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
 import pygame
@@ -10,24 +10,30 @@ def setup_screen():
 	return pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 def test_loop():
-	screen = setup_screen()
-	while 1 == 1:
-		for event in pygame.event.get():
-   			if event.type == pygame.QUIT:
-        			return
-		screen.fill("black")
-		pygame.display.flip()
-		
-
-
+    game_clock = pygame.time.Clock()
+    dt = 0
+    screen = setup_screen()
+    while 1 == 1:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
+        screen.fill("black")
+        pygame.display.flip()
+        dt = game_clock.tick(60)
 
 def main():
 	print("Starting asteroids!")
 	print(f"Screen width: {SCREEN_WIDTH}")
 	print(f"Screen height: {SCREEN_HEIGHT}")
+
+#pygame init
 	pygame.init()
-	test_loop()
 	
+	
+
+#run test loop
+	test_loop()
+
 	
 if __name__ == "__main__":
       main()
