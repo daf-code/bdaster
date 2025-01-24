@@ -1,18 +1,24 @@
-# this allows us to use code from
-# the open-source pygame library
-# throughout this file
+#hack to avoid ALSA issue on WSL
+import os 
+os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
 import pygame
 from pygame.locals import *
 from constants import *
 
 def setup_screen():
-	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+	return pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 def test_loop():
-	for event in pygame.event.get():
-   		if event.type == pygame.QUIT:
-        		return
+	screen = setup_screen()
+	while 1 == 1:
+		for event in pygame.event.get():
+   			if event.type == pygame.QUIT:
+        			return
+		screen.fill("black")
+		pygame.display.flip()
+		
+
 
 
 def main():
@@ -20,7 +26,6 @@ def main():
 	print(f"Screen width: {SCREEN_WIDTH}")
 	print(f"Screen height: {SCREEN_HEIGHT}")
 	pygame.init()
-	setup_screen()
 	test_loop()
 	
 	
