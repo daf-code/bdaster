@@ -40,9 +40,16 @@ def main():
 	game_clock = pygame.time.Clock()
 	dt = 0
 	
+#define containers
+
+	updatable = pygame.sprite.Group()
+	drawable = pygame.sprite.Group()
+	Player.containers = (updatable, drawable)
+	
 #create player outside loop
 	player_1 = Player((SCREEN_WIDTH/2), (SCREEN_HEIGHT/2))
 	
+	 
 #enter primary game loop
 	while True:
 		for event in pygame.event.get():
@@ -59,8 +66,12 @@ def main():
 		screen.fill("black")
 	
 		#draw objects
-		player_1.update(dt)
-		player_1.draw(screen)
+		for i in updatable:
+			i.update(dt)
+		
+		for i in drawable:
+			i.draw(screen)
+
 	
 	
 	
