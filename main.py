@@ -70,7 +70,8 @@ def main():
 	
 		
 		#draw objects
-		drawable.draw(screen)
+		for obj in drawable:
+			obj.draw(screen)
 		
 
 		#update the display and delta time
