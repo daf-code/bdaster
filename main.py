@@ -64,17 +64,15 @@ def main():
 
 		#blank screen
 		screen.fill("black")
-	
-		#draw objects
-		for i in updatable:
-			i.update(dt)
 		
-		for i in drawable:
-			i.draw(screen)
+		#perform update
+		updatable.update(dt)
+	
+		
+		#draw objects
+		drawable.draw(screen)
+		
 
-	
-	
-	
 		#update the display and delta time
 		pygame.display.flip()
 		dt = game_clock.tick(60) / 1000.0 # convert ms to s
