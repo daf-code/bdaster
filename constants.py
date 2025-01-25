@@ -5,3 +5,16 @@ ASTEROID_MIN_RADIUS = 20
 ASTEROID_KINDS = 3
 ASTEROID_SPAWN_RATE = 0.8  # seconds
 ASTEROID_MAX_RADIUS = ASTEROID_MIN_RADIUS * ASTEROID_KINDS
+
+PLAYER_RADIUS = 20
+
+PLAYER_TURN_SPEED = 300
+PLAYER_MOVE_SPEED = 50
+
+WRAP_AROUND = True  # or False for clamping
+
+PLAYER_ACCELERATION = 1200  # How quickly we speed up
+PLAYER_FRICTION = 0.992     # How quickly we slow down (1.0 = no friction)
+
+THRUST_SCALE = 0.4  # Used to adjust size of thrust graphic in relation to ship base
+THRUST_RADIUS_MULTIPLIER = (4/3) * THRUST_SCALE

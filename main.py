@@ -4,6 +4,8 @@ os.environ['SDL_AUDIODRIVER'] = 'dsp'
 
 import pygame
 from pygame.locals import *
+from circleshape import *
+from player import *
 from constants import *
 
 def setup_screen():
@@ -28,12 +30,43 @@ def main():
 
 #pygame init
 	pygame.init()
-	
-	
 
 #run test loop
-	test_loop()
+	#test_loop()
 
+#startup routine
+	
+	screen = setup_screen()
+	game_clock = pygame.time.Clock()
+	dt = 0
+	
+#create player outside loop
+	player_1 = Player((SCREEN_WIDTH/2), (SCREEN_HEIGHT/2))
+	
+#enter primary game loop
+	while True:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				return
+			#elif event.type == pygame.KEYDOWN:
+			#	print(f"Key pressed: {event.key}") #key debug
+			#	if event.key == pygame.K_a:
+			#		print("A key pressed")
+			#	if event.key == pygame.K_d:
+			#		print("D key pressed")
+
+		#blank screen
+		screen.fill("black")
+	
+		#draw objects
+		player_1.update(dt)
+		player_1.draw(screen)
+	
+	
+	
+		#update the display and delta time
+		pygame.display.flip()
+		dt = game_clock.tick(60) / 1000.0 # convert ms to s
 	
 if __name__ == "__main__":
       main()
