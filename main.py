@@ -6,6 +6,7 @@ import pygame
 from pygame.locals import *
 from circleshape import *
 from player import *
+from thrust import *
 from constants import *
 
 def setup_screen():
@@ -44,12 +45,23 @@ def main():
 
 	updatable = pygame.sprite.Group()
 	drawable = pygame.sprite.Group()
+	
+#add classes to containers in order of program flow	
 	Player.containers = (updatable, drawable)
-	
-#create player outside loop
+	Thrust.containers = (updatable, drawable)
+	print("Player.containers set:")
+	print(Player.containers)
+	print("Thrust.containers set:")
+	print(Thrust.containers)
+	print("Drawable group is:")
+	print(drawable)
+	print("Updatable group is:")
+	print(updatable)
+
+#create player and thrust outside loop
 	player_1 = Player((SCREEN_WIDTH/2), (SCREEN_HEIGHT/2))
-	
-	 
+	thrust_1 = Thrust(player_1)
+	print(Player.mro())
 #enter primary game loop
 	while True:
 		for event in pygame.event.get():
@@ -62,16 +74,20 @@ def main():
 			#	if event.key == pygame.K_d:
 			#		print("D key pressed")
 
-		#blank screen
-		screen.fill("black")
 		
 		#perform update
 		updatable.update(dt)
 	
 		
+		#blank screen
+		screen.fill("black")
+		
+		 
 		#draw objects
-		for obj in drawable:
-			obj.draw(screen)
+		drawable.draw(screen)
+		
+		#for obj in drawable:
+		#	obj.draw(screen)
 		
 
 		#update the display and delta time
