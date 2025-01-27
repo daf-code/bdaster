@@ -7,6 +7,7 @@ from pygame.locals import *
 from circleshape import *
 from player import *
 from thrust import *
+from asteroidfield import *
 from constants import *
 
 def setup_screen():
@@ -30,10 +31,14 @@ def main():
 
 	updatable = pygame.sprite.Group()
 	drawable = pygame.sprite.Group()
+	asteroids = pygame.sprite.Group()
 	
 #add classes to containers in order of program flow	
 	Player.containers = (updatable, drawable)
 	Thrust.containers = (updatable, drawable)
+	Asteroid.containers = (asteroids, drawable, updatable)
+	AsteroidField.containers = (updatable)
+	
 	print("Player.containers set:")
 	print(Player.containers)
 	print("Thrust.containers set:")
@@ -42,6 +47,10 @@ def main():
 	print(drawable)
 	print("Updatable group is:")
 	print(updatable)
+
+#create asteroid field outside loop
+
+	asteroid_field = AsteroidField()
 
 #create player and thrust outside loop
 	player_1 = Player((SCREEN_WIDTH/2), (SCREEN_HEIGHT/2))
