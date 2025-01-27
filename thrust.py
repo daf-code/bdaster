@@ -44,8 +44,8 @@ class Thrust(pygame.sprite.Sprite):
     		# Check if the player is actively thrusting (public attribute of Player)
 		# Align rotation: Upate to match the Player's rotation before drawn
 		#self.image = pygame.transform.rotate(self.original_image, -self.player.rotation)
-		self.next_image = pygame.transform.rotate(self.image, self.player.rotation)
-		rad_rot = math.radians((self.player.rotation+180)%360)
+		self.next_image = pygame.transform.rotate(self.original_image, self.player.rotation)
+		rad_rot = math.radians(self.player.rotation)
 		print(f"Thrust received Player radius of:  {self.player.radius} and Player rotation at: {self.player.rotation}")
 		thrust_anchor_x, thrust_anchor_y = self.player.get_thrust_anchor()
 		print(f"Thrust received Player's thrust anchor at: {thrust_anchor_x}, {thrust_anchor_y}")
@@ -61,6 +61,7 @@ class Thrust(pygame.sprite.Sprite):
 		
 		if self.player.is_thrusting: #then make the Thrust sprite image appear when drawn
 			self.image = self.next_image
+			
 		else: #hide it if not thrusting
 			self.image = self.next_image #for testing
 			#self.image = self.blank_image
