@@ -28,18 +28,6 @@ class Player(CircleShape):
 	def get_forward_vector(self):
 		return pygame.Vector2(0, -1).rotate(self.rotation)
 		
-		
-	#def triangle(self):
-		#forward = self.get_forward_vector()
-		#right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
-		#a = self.position + forward * self.radius
-		#b = self.position - forward * self.radius - right
-		#c = self.position - forward * self.radius + right
-		#return [a, b, c]
-	
-	#using mathematical normalization instead of shifting floor mod
-	#def floor_mod(value, mod): 
-		#return  value - (value // mod) * mod
 	
 	def rotate(self, dt):
 		print(f"rotation before: {self.rotation}")
@@ -118,7 +106,7 @@ class Player(CircleShape):
 			
 	def move_back(self, dt):
 		self.is_thrusting = True
-		self.move(dt)
+		self.move(-dt)
 		
 	def no_move(self):
 		self.is_thrusting = False
@@ -134,23 +122,22 @@ class Player(CircleShape):
 		self.position += self.velocity * dt
 		self.rect.center = self.position
 		
-		# Apply velocity to thrust's position as well
-		#self.thrust.position += self.velocity * dt
-		#self.thrust.rect.center = self.thrust.position
-		
 		#apply rotation to orientation
 		old_center = self.rect.center  # Save the current rect's center
 		self.image = pygame.transform.rotate(self.original_image, self.rotation)
 		self.rect = self.image.get_rect(center=old_center)  # Re-center the rect
 		
-		#old circle thrust graphic code
+		#apply friction to velocity
+		self.velocity *= PLAYER_FRICTION
+		#handle boundaries per setting
+		self.handle_boundaries()	
+		
+
+########################
+### OLD CODE BELOW ####	
+#old circle thrust graphic code
 		#if self.velocity.length() > 0.1: #draw thrust if we have velocity
 			#thrust_size = self.get_thrust_size() # call the thrust size function
 			#circle_thrust_pos = self.position + self.get_forward_vector() * -20 # position the thrust graphic
 			#pygame.draw.circle(screen, (255, 100, 0), circle_thrust_pos, thrust_size) # draw the thrust graphic
 	
-		
-		#apply friction to velocity
-		self.velocity *= PLAYER_FRICTION
-		#handle boundaries per setting
-		self.handle_boundaries()	
