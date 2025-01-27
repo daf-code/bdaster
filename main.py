@@ -12,18 +12,6 @@ from constants import *
 def setup_screen():
 	return pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-def test_loop():
-    game_clock = pygame.time.Clock()
-    dt = 0
-    screen = setup_screen()
-    while 1 == 1:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                return
-        screen.fill("black")
-        pygame.display.flip()
-        dt = game_clock.tick(60)
-
 def main():
 	print("Starting asteroids!")
 	print(f"Screen width: {SCREEN_WIDTH}")
@@ -31,9 +19,6 @@ def main():
 
 #pygame init
 	pygame.init()
-
-#run test loop
-	#test_loop()
 
 #startup routine
 	
@@ -70,47 +55,39 @@ def main():
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				return
-			#elif event.type == pygame.KEYDOWN:
-			#	print(f"Key pressed: {event.key}") #key debug
+			###keyboard debugging###
+			#elif event.type == pygame.KEYDOWN: 
+			#	print(f"Key pressed: {event.key}") 
 			#	if event.key == pygame.K_a:
 			#		print("A key pressed")
 			#	if event.key == pygame.K_d:
 			#		print("D key pressed")
-
 		#accept input
 		keys = pygame.key.get_pressed()
 		if keys[pygame.K_a] or keys[1073741904]:
-			player_1.rotate_lt(dt)# rotate left
+			player_1.rotate_lt(dt)	# rotate left
 		
 		if keys[pygame.K_d] or keys[1073741903]:
-			player_1.rotate_rt(dt)# rotate rt
+			player_1.rotate_rt(dt)	# rotate rt
 			
 		if keys[pygame.K_w] or keys[1073741906]:
-			player_1.move_fwd(dt)
+			player_1.move_fwd(dt)	# fwd
 			
 		elif keys[pygame.K_s] or keys[1073741905]:
-			player_1.move_back(dt)
+			player_1.move_back(dt)	# back
 					
 		else:
-			player_1.no_move()				
-		
-		
+			player_1.no_move()	# no input				
 		
 		#perform update
-		updatable.update(dt)
-	
-		
+		updatable.update(dt)			
 		#blank screen
-		screen.fill("black")
-		
-		 
+		screen.fill("black")		 
 		#draw objects
 		drawable.draw(screen)
-		
-
 		#update the display and delta time
 		pygame.display.flip()
 		dt = game_clock.tick(60) / 1000.0 # convert ms to s
-	
+
 if __name__ == "__main__":
       main()
