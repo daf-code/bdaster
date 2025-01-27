@@ -9,6 +9,7 @@ from player import *
 from thrust import *
 from asteroidfield import *
 from constants import *
+import sys
 
 def setup_screen():
 	return pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -37,7 +38,7 @@ def main():
 	Player.containers = (updatable, drawable)
 	Thrust.containers = (updatable, drawable)
 	Asteroid.containers = (asteroids, drawable, updatable)
-	AsteroidField.containers = (updatable)
+	AsteroidField.containers = (updatable,)
 	
 	print("Player.containers set:")
 	print(Player.containers)
@@ -89,7 +90,13 @@ def main():
 			player_1.no_move()	# no input				
 		
 		#perform update
-		updatable.update(dt)			
+		updatable.update(dt)
+		#check collision
+		for object in asteroids:
+			if object.col_check(player_1):
+				print("===============GAME OVER===============")
+				sys.exit()
+						
 		#blank screen
 		screen.fill("black")		 
 		#draw objects
