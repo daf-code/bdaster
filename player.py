@@ -1,4 +1,5 @@
 import pygame
+import math
 from pygame.locals import *  # This is important for key constants
 from constants import *
 from circleshape import CircleShape
@@ -20,12 +21,9 @@ class Player(CircleShape):
 		
 		self.thrust_max_size = self.radius * THRUST_RADIUS_MULTIPLIER # calculate max and min thrust size once
 		self.thrust_min_size = self.thrust_max_size * 0.2
-	
+		self.height = self.image.get_height()
 		
-		#if self.velocity.length() > 0.1: #draw thrust if we have velocity
-		#	thrust_size = self.get_thrust_size() # call the thrust size function
-		#	thrust_pos = self.position + self.get_forward_vector() * -20 # position the thrust graphic
-		#	pygame.draw.circle(screen, (255, 100, 0), thrust_pos, thrust_size) # draw the thrust graphic
+		
 		
 	def get_forward_vector(self):
 		return pygame.Vector2(0, -1).rotate(self.rotation)
@@ -96,31 +94,39 @@ class Player(CircleShape):
 		# Map it to a reasonable visual size (you can adjust these values)
 		return min(self.thrust_max_size, max(self.thrust_min_size, speed / 50))
 	
-	def update(self, dt):
-		#print("Update is running!")  # debug update
-		keys = pygame.key.get_pressed()
+	
+	def get_thrust_anchor(self):
+		anchor_offset = self.height/2
+		p_center_x, p_center_y = self.rect.center
+		#radian rotation if needed here
+		rad_rot = math.radians(self.rotation)
+		#offset_x = #should not be needed
+		offset_y = math.cos(rad_rot) * -anchor_offset  
+		return p_center_x, p_center_y + offset_y
+	
+	
+	
+	def rotate_lt(self, dt):
+		self.rotate(dt)# rotate left
+	
+	def rotate_rt(self, dt):
+		self.rotate(-1*dt)# rotate rt
+			
+	def move_fwd(self, dt):
+		self.is_thrusting = True
+		self.move(dt)
+			
+	def move_back(self, dt):
+		self.is_thrusting = True
+		self.move(dt)
 		
-		# Debug all key states
-		if keys[pygame.K_a] or keys[1073741903]:
-			print("A key is pressed")
-		if keys[pygame.K_d] or keys[1073741904]:
-			print("D key is pressed")
-
-		if keys[pygame.K_a] or keys[1073741904]:
-			self.rotate(dt)# rotate left
-		if keys[pygame.K_d] or keys[1073741903]:
-            		self.rotate(-1*dt)# rotate rt
-			
-		if keys[pygame.K_w] or keys[1073741906]:
-			self.is_thrusting = True
-			self.move(dt)
-			
-		elif keys[pygame.K_s] or keys[1073741905]:
-			self.is_thrusting = True
-			self.move(-dt)
-		else:
-			self.is_thrusting = False
-			
+	def no_move(self):
+		self.is_thrusting = False
+	
+	
+	
+	def update(self, dt):
+		print("Update Player is running!")  # debug update	
 		#print(f"DT: {dt}")
 		#print(f"Current velocity: {self.velocity}")
 		
@@ -128,10 +134,21 @@ class Player(CircleShape):
 		self.position += self.velocity * dt
 		self.rect.center = self.position
 		
+		# Apply velocity to thrust's position as well
+		#self.thrust.position += self.velocity * dt
+		#self.thrust.rect.center = self.thrust.position
+		
 		#apply rotation to orientation
 		old_center = self.rect.center  # Save the current rect's center
 		self.image = pygame.transform.rotate(self.original_image, self.rotation)
 		self.rect = self.image.get_rect(center=old_center)  # Re-center the rect
+		
+		#old circle thrust graphic code
+		#if self.velocity.length() > 0.1: #draw thrust if we have velocity
+			#thrust_size = self.get_thrust_size() # call the thrust size function
+			#circle_thrust_pos = self.position + self.get_forward_vector() * -20 # position the thrust graphic
+			#pygame.draw.circle(screen, (255, 100, 0), circle_thrust_pos, thrust_size) # draw the thrust graphic
+	
 		
 		#apply friction to velocity
 		self.velocity *= PLAYER_FRICTION

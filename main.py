@@ -60,9 +60,12 @@ def main():
 
 #create player and thrust outside loop
 	player_1 = Player((SCREEN_WIDTH/2), (SCREEN_HEIGHT/2))
-	thrust_1 = Thrust(player_1)
-	print(Player.mro())
+	player_1.thrust = Thrust(player_1)
+	#print(player_1.mro())	
+	#print(player_1.thrust.mro())
+
 #enter primary game loop
+
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -74,6 +77,24 @@ def main():
 			#	if event.key == pygame.K_d:
 			#		print("D key pressed")
 
+		#accept input
+		keys = pygame.key.get_pressed()
+		if keys[pygame.K_a] or keys[1073741904]:
+			player_1.rotate_lt(dt)# rotate left
+		
+		if keys[pygame.K_d] or keys[1073741903]:
+			player_1.rotate_rt(dt)# rotate rt
+			
+		if keys[pygame.K_w] or keys[1073741906]:
+			player_1.move_fwd(dt)
+			
+		elif keys[pygame.K_s] or keys[1073741905]:
+			player_1.move_back(dt)
+					
+		else:
+			player_1.no_move()				
+		
+		
 		
 		#perform update
 		updatable.update(dt)
@@ -85,9 +106,6 @@ def main():
 		 
 		#draw objects
 		drawable.draw(screen)
-		
-		#for obj in drawable:
-		#	obj.draw(screen)
 		
 
 		#update the display and delta time
