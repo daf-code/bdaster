@@ -10,7 +10,8 @@ class Player(CircleShape):
 		
 		#self image			
 		self.original_image = pygame.Surface((50, 50), pygame.SRCALPHA)  # Transparent surface
-		pygame.draw.polygon(self.original_image, (255, 255, 255), [(25, 0), (0, 50), (50, 50)])
+		triangle_points = [(25, 25 - 25), (0, 25 + 25), (50, 25 + 25)]
+		pygame.draw.polygon(self.original_image, (255, 255, 255), triangle_points)
 		self.image = self.original_image
 		self.rect = self.image.get_rect()
 		self.rect.center = (x, y)
@@ -30,10 +31,10 @@ class Player(CircleShape):
 		
 	
 	def rotate(self, dt):
-		print(f"rotation before: {self.rotation}")
+		print(f"player rotation before: {self.rotation}")
 		self.rotation += (PLAYER_TURN_SPEED * dt)
 		self.rotation = (self.rotation + 180) % 360 - 180
-		print(f"rotation after: {self.rotation} with normalization")
+		print(f"player rotation after: {self.rotation} with normalization")
 		
 	def handle_boundaries(self):
 		if WRAP_AROUND:
