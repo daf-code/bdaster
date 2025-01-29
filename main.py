@@ -100,6 +100,13 @@ def main():
 		updatables.update(dt)
 		#check collision
 		for object in asteroids:
+			for shot in player_1.shots:
+				if object.col_check(shot):
+					print("===============ASTEROID DESTROYED===============")
+					object.kill()
+					shot.kill()
+
+		for object in asteroids:
 			if object.col_check(player_1):
 				print("===============COLLISION===============")
 				#print("===============GAME OVER===============")
