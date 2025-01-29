@@ -83,10 +83,10 @@ def main():
 		if keys[pygame.K_d] or keys[1073741903]:
 			player_1.rotate_rt(dt)	# rotate rt
 			
-		if keys[pygame.K_w] or keys[1073741905]:
+		if keys[pygame.K_w] or keys[1073741906]:
 			player_1.move_fwd(dt)	# fwd
 			
-		elif keys[pygame.K_s] or keys[1073741906]:
+		elif keys[pygame.K_s] or keys[1073741905]:
 			player_1.move_back(dt)	# back
 		
 		if keys[pygame.K_SPACE]:

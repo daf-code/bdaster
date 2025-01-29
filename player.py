@@ -30,7 +30,7 @@ class Player(CircleShape):
 		self.thrust_max_size = self.radius * THRUST_RADIUS_MULTIPLIER # calculate max and min thrust size once
 		self.thrust_min_size = self.thrust_max_size * 0.2
 		self.height = self.image.get_height()
-		
+		self.shot_timer = 0
 		
 		
 	def get_forward_vector(self):
@@ -83,13 +83,17 @@ class Player(CircleShape):
 		self.velocity += forward * PLAYER_ACCELERATION * dt
 		print(f"After velocity: {self.velocity}")
 	
-	def shoot(self, position_x, position_y):
-		shot = Shot(position_x, position_y, SHOT_RADIUS)
-		#displaced vector tracking orbiter
-		#shot.velocity = pygame.Vector2(0, -1).rotate(self.player.rotation) * PLAYER_SHOT_SPEED
-		shot.velocity = self.get_forward_vector() * PLAYER_SHOT_SPEED
-		return shot
 	
+	def shoot(self, position_x, position_y,):
+		if self.shot_timer == 0:
+			shot = Shot(position_x, position_y, SHOT_RADIUS)
+			#displaced vector tracking orbiter
+			#shot.velocity = pygame.Vector2(0, -1).rotate(self.player.rotation) * PLAYER_SHOT_SPEED
+			shot.velocity = self.get_forward_vector() * PLAYER_SHOT_SPEED
+			self.shot_timer = SHOT_COOLDOWN
+			return shot
+		else:
+			return None
 		
 	def get_thrust_size(self):
 	# Get current velocity magnitude (speed)
@@ -132,7 +136,10 @@ class Player(CircleShape):
 		print("Update Player is running!")  # debug update	
 		#print(f"DT: {dt}")
 		#print(f"Current velocity: {self.velocity}")
-		
+		#check for shot timer
+		if self.shot_timer > 0:
+			self.shot_timer = max(0, self.shot_timer - dt)
+		print(f"Shot timer: {self.shot_timer}")
 		#apply velocity to position
 		self.position += self.velocity * dt
 		self.rect.center = self.position
