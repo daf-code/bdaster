@@ -18,3 +18,7 @@ PLAYER_FRICTION = 0.992     # How quickly we slow down (1.0 = no friction)
 
 THRUST_SCALE = 0.4  # Used to adjust size of thrust graphic in relation to ship base
 THRUST_RADIUS_MULTIPLIER = (4/3) * THRUST_SCALE
+
+SHOT_RADIUS = 5
+PLAYER_SHOT_SPEED = 500
+SHOT_LIFETIME = 1000  # milliseconds    

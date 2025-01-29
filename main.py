@@ -10,6 +10,7 @@ from thrust import *
 from asteroidfield import *
 from constants import *
 import sys
+from shot import *
 
 def setup_screen():
 	return pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -30,25 +31,27 @@ def main():
 	
 #define containers
 
-	updatable = pygame.sprite.Group()
-	drawable = pygame.sprite.Group()
+	updatables = pygame.sprite.Group()
+	drawables = pygame.sprite.Group()
 	asteroids = pygame.sprite.Group()
 	
 #add classes to containers in order of program flow	
-	Player.containers = (updatable, drawable)
-	Thrust.containers = (updatable, drawable)
-	Asteroid.containers = (asteroids, drawable, updatable)
-	AsteroidField.containers = (updatable,)
+	Player.containers = (updatables, drawables)
+	Thrust.containers = (updatables, drawables)
+	Asteroid.containers = (asteroids, drawables, updatables)
+	AsteroidField.containers = (updatables,)
+	Shot.containers = (updatables, drawables)
+
 	
 	print("Player.containers set:")
 	print(Player.containers)
 	print("Thrust.containers set:")
 	print(Thrust.containers)
 	print("Drawable group is:")
-	print(drawable)
+	print(drawables)
 	print("Updatable group is:")
-	print(updatable)
-
+	print(updatables)
+	
 #create asteroid field outside loop
 
 	asteroid_field = AsteroidField()
@@ -80,27 +83,33 @@ def main():
 		if keys[pygame.K_d] or keys[1073741903]:
 			player_1.rotate_rt(dt)	# rotate rt
 			
-		if keys[pygame.K_w] or keys[1073741906]:
+		if keys[pygame.K_w] or keys[1073741905]:
 			player_1.move_fwd(dt)	# fwd
 			
-		elif keys[pygame.K_s] or keys[1073741905]:
+		elif keys[pygame.K_s] or keys[1073741906]:
 			player_1.move_back(dt)	# back
-					
+		
+		if keys[pygame.K_SPACE]:
+			player_1.shoot(player_1.position.x, player_1.position.y)
+
 		else:
 			player_1.no_move()	# no input				
 		
-		#perform update
-		updatable.update(dt)
+		#perform updates
+		#for updatable in updatables:
+		updatables.update(dt)
 		#check collision
 		for object in asteroids:
 			if object.col_check(player_1):
-				print("===============GAME OVER===============")
-				sys.exit()
+				print("===============COLLISION===============")
+				#print("===============GAME OVER===============")
+				#sys.exit()
 						
 		#blank screen
 		screen.fill("black")		 
 		#draw objects
-		drawable.draw(screen)
+		#for drawable in drawables:
+		drawables.draw(screen)
 		#update the display and delta time
 		pygame.display.flip()
 		dt = game_clock.tick(60) / 1000.0 # convert ms to s

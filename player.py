@@ -3,6 +3,7 @@ import math
 from pygame.locals import *  # This is important for key constants
 from constants import *
 from circleshape import CircleShape
+from shot import Shot
 
 class Player(CircleShape):
 	def __init__(self, x, y):
@@ -10,16 +11,22 @@ class Player(CircleShape):
 		
 		#self image			
 		self.original_image = pygame.Surface((50, 50), pygame.SRCALPHA)  # Transparent surface
-		triangle_points = [(25, 25 - 25), (0, 25 + 25), (50, 25 + 25)]
-		pygame.draw.polygon(self.original_image, (255, 255, 255), triangle_points)
+		#tri_pts = [(25, 25 - 25), (0, 25 + 25), (50, 25 + 25)]
+		tri_pts = [(25, 0), (0, 50), (50, 50)]
+		mini_tri_pts = [(25, 0), (15, 12.5), (35, 12.5)]
+		self.rotation = 0
+		pygame.draw.polygon(self.original_image, (255, 255, 255), tri_pts)
+		pygame.draw.polygon(self.original_image, (255, 0, 255), mini_tri_pts)
 		self.image = self.original_image
 		self.rect = self.image.get_rect()
 		self.rect.center = (x, y)
-
+		# Draw line relative to the surface's center (25, 25)
+		rotation_line_len = 400
+		surface_center = (25, 25)  # Center of the 50x50 surface
+		rotation_line_end = (25, 25 - rotation_line_len)  # Go up from center
+		pygame.draw.line(self.original_image, (0, 255, 255), surface_center, rotation_line_end, 3)
 		self.is_thrusting = False
-		self.rotation = 0
 		self.velocity = pygame.Vector2(0, 0)  # Start with no velocity
-		
 		self.thrust_max_size = self.radius * THRUST_RADIUS_MULTIPLIER # calculate max and min thrust size once
 		self.thrust_min_size = self.thrust_max_size * 0.2
 		self.height = self.image.get_height()
@@ -27,15 +34,16 @@ class Player(CircleShape):
 		
 		
 	def get_forward_vector(self):
-		return pygame.Vector2(0, -1).rotate(self.rotation)
-		
+		# Convert to counterclockwise rotation for Pygame's Vector2.rotate()
+		return pygame.Vector2(0, -1).rotate(-self.rotation)
+			
 	
 	def rotate(self, dt):
-		print(f"player rotation before: {self.rotation}")
+		# Remove the normalization that was causing issues
 		self.rotation += (PLAYER_TURN_SPEED * dt)
-		self.rotation = (self.rotation + 180) % 360 - 180
-		print(f"player rotation after: {self.rotation} with normalization")
+		self.rotation %= 360  # Keep rotation between 0 and 360 degrees
 		
+
 	def handle_boundaries(self):
 		if WRAP_AROUND:
 			if self.position.x > SCREEN_WIDTH:
@@ -74,7 +82,13 @@ class Player(CircleShape):
 		#acceleration/deceleration
 		self.velocity += forward * PLAYER_ACCELERATION * dt
 		print(f"After velocity: {self.velocity}")
-		
+	
+	def shoot(self, position_x, position_y):
+		shot = Shot(position_x, position_y, SHOT_RADIUS)
+		#displaced vector tracking orbiter
+		#shot.velocity = pygame.Vector2(0, -1).rotate(self.player.rotation) * PLAYER_SHOT_SPEED
+		shot.velocity = self.get_forward_vector() * PLAYER_SHOT_SPEED
+		return shot
 	
 		
 	def get_thrust_size(self):
