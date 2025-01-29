@@ -6,7 +6,7 @@ import pygame
 from pygame.locals import *
 from circleshape import *
 from player import *
-from thrust import *
+#from thrust import *
 from asteroidfield import *
 from constants import *
 import sys
@@ -34,19 +34,20 @@ def main():
 	updatables = pygame.sprite.Group()
 	drawables = pygame.sprite.Group()
 	asteroids = pygame.sprite.Group()
-	
+	shots = pygame.sprite.Group()
+
 #add classes to containers in order of program flow	
 	Player.containers = (updatables, drawables)
-	Thrust.containers = (updatables, drawables)
+#	Thrust.containers = (updatables, drawables)
 	Asteroid.containers = (asteroids, drawables, updatables)
 	AsteroidField.containers = (updatables,)
-	Shot.containers = (updatables, drawables)
+	Shot.containers = (shots, updatables, drawables)
 
 	
 	print("Player.containers set:")
 	print(Player.containers)
-	print("Thrust.containers set:")
-	print(Thrust.containers)
+#	print("Thrust.containers set:")
+#	print(Thrust.containers)
 	print("Drawable group is:")
 	print(drawables)
 	print("Updatable group is:")
@@ -58,7 +59,7 @@ def main():
 
 #create player and thrust outside loop
 	player_1 = Player((SCREEN_WIDTH/2), (SCREEN_HEIGHT/2))
-	player_1.thrust = Thrust(player_1)
+#	player_1.thrust = Thrust(player_1)
 	#print(player_1.mro())	
 	#print(player_1.thrust.mro())
 
@@ -100,10 +101,10 @@ def main():
 		updatables.update(dt)
 		#check collision
 		for object in asteroids:
-			for shot in player_1.shots:
+			for shot in shots:
 				if object.col_check(shot):
 					print("===============ASTEROID DESTROYED===============")
-					object.kill()
+					object.split()
 					shot.kill()
 
 		for object in asteroids:
@@ -119,7 +120,7 @@ def main():
 		drawables.draw(screen)
 		#update the display and delta time
 		pygame.display.flip()
-		dt = game_clock.tick(60) / 1000.0 # convert ms to s
+		dt = game_clock.tick(60) / 1000.0 # FPS limit
 
 if __name__ == "__main__":
       main()

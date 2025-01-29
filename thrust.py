@@ -43,14 +43,14 @@ class Thrust(pygame.sprite.Sprite):
 	def update(self, dt): #called in pygame update loop
     		# Check if the player is actively thrusting (public attribute of Player)
 		# Align rotation: Upate to match the Player's rotation before drawn
-		#self.image = pygame.transform.rotate(self.original_image, -self.player.rotation)
-		self.next_image = pygame.transform.rotate(self.original_image, self.player.rotation)
+		self.next_image = pygame.transform.rotate(self.original_image, -self.player.rotation)
+		#self.next_image = pygame.transform.rotate(self.original_image, self.player.rotation)
 		rad_rot = math.radians(self.player.rotation)
 		print(f"Thrust received Player radius of:  {self.player.radius} and Player rotation at: {self.player.rotation}")
 		thrust_anchor_x, thrust_anchor_y = self.player.get_thrust_anchor()
 		print(f"Thrust received Player's thrust anchor at: {thrust_anchor_x}, {thrust_anchor_y}")
-		thrust_gspace_x = thrust_anchor_x + math.sin(rad_rot) * self.y_offset
-		thrust_gspace_y = thrust_anchor_y - math.cos(rad_rot) * self.y_offset
+		thrust_gspace_x = thrust_anchor_x - math.sin(rad_rot) * self.y_offset
+		thrust_gspace_y = thrust_anchor_y + math.cos(rad_rot) * self.y_offset
 		print(f"Thrust derived a globalspace anchor at: {thrust_gspace_x}, {thrust_gspace_y} using a y offset of {self.y_offset}")
 		#self.rect = self.next_image.get_rect(center=self.rect.center)
 		#self.rect = self.image.get_rect(center = thrust_gspasce_x, thrust_gspace_y)		
